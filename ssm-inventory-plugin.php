@@ -437,17 +437,188 @@ final class SSM_Inventory_Plugin {
         echo '</template>';
     }
 
-    /**
+  /**
      * Renders the Unit Types page.
      * (Rule 6: Must have root div and template)
      */
     public function render_admin_page_unit_types() {
-        // Root div for JS app
-        echo '<div id="ssm-unit-types-root" class="ssm-root" data-screen="unit-types"></div>';
-
+        // Root div for JS app (Rule 6)
+        echo '<div id="ssm-unit-types-root" class="ssm-root" data-screen="unit-types">';
+        echo '</div>'; // JS app will mount here
+        
         // Full page template (Rule 6)
         echo '<template id="ssm-unit-types-template">';
-        echo '<div>Loading Unit Types Page...</div>'; // Placeholder
+        ?>
+        <div class="ssm-page-wrapper">
+            
+            <header class="ssm-page-header">
+                <div class="ssm-header-left">
+                    <h1><?php _e( 'Unit Types', 'ssm-inventory' ); ?></h1>
+                    <p><?php _e( 'Define, manage, and categorize all available unit types.', 'ssm-inventory' ); ?></p>
+                </div>
+                <div class="ssm-header-right">
+                    <button class="ssm-button ssm-button-primary ssm-button-add-new">
+                        <?php _e( 'Add Unit Type', 'ssm-inventory' ); ?>
+                    </button>
+                </div>
+            </header>
+            <div class="ssm-stat-card-row">
+                <div class="ssm-stat-card">
+                    <div class="ssm-stat-card-icon" style="--icon-bg: #e0f2fe;">
+                        </div>
+                    <div class="ssm-stat-card-info">
+                        <span class="ssm-stat-card-title"><?php _e( 'Total Unit Types', 'ssm-inventory' ); ?></span>
+                        <span class="ssm-stat-card-value">8 <small><?php _e( 'Active', 'ssm-inventory' ); ?></small></span>
+                    </div>
+                </div>
+                <div class="ssm-stat-card">
+                    <div class="ssm-stat-card-icon" style="--icon-bg: #fef9c3;">
+                        </div>
+                    <div class="ssm-stat-card-info">
+                        <span class="ssm-stat-card-title"><?php _e( 'Linked Units', 'ssm-inventory' ); ?></span>
+                        <span class="ssm-stat-card-value">57 <small><?php _e( 'Units assigned', 'ssm-inventory' ); ?></small></span>
+                    </div>
+                </div>
+                <div class="ssm-stat-card">
+                    <div class="ssm-stat-card-icon" style="--icon-bg: #fce7f3;">
+                        </div>
+                    <div class="ssm-stat-card-info">
+                        <span class="ssm-stat-card-title"><?php _e( 'Pending Reviews', 'ssm-inventory' ); ?></span>
+                        <span class="ssm-stat-card-value">2 <small><?php _e( 'Drafts', 'ssm-inventory' ); ?></small></span>
+                    </div>
+                </div>
+                <div classs="ssm-stat-card">
+                    <div class="ssm-stat-card-icon" style="--icon-bg: #ede9fe;">
+                        </div>
+                    <div class="ssm-stat-card-info">
+                        <span class="ssm-stat-card-title"><?php _e( 'Last Updated', 'ssm-inventory' ); ?></span>
+                        <span class="ssm-stat-card-value"><small><?php _e( 'Today, 3:15 PM', 'ssm-inventory' ); ?></small></span>
+                    </div>
+                </div>
+            </div>
+            <div class="ssm-page-content-grid ssm-grid-with-sidebar">
+                
+                <div class="ssm-grid-main">
+                    <section class="ssm-card ssm-card-table">
+                        <div class="ssm-table-header">
+                            <h2><?php _e( 'All Unit Types', 'ssm-inventory' ); ?></h2>
+                            <div class="ssm-table-controls">
+                                <input type="search" placeholder="<?php _e( 'Search Types...', 'ssm-inventory' ); ?>" class="ssm-search-input">
+                                <select class="ssm-filter-select">
+                                    <option><?php _e( 'Filter', 'ssm-inventory' ); ?></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <table class="ssm-table">
+                            <thead>
+                                <tr>
+                                    <th><?php _e( 'ID', 'ssm-inventory' ); ?></th>
+                                    <th><?php _e( 'Type Name', 'ssm-inventory' ); ?></th>
+                                    <th><?php _e( 'Category', 'ssm-inventory' ); ?></th>
+                                    <th><?php _e( 'Capacity', 'ssm-inventory' ); ?></th>
+                                    <th><?php _e( 'Features JSON', 'ssm-inventory' ); ?></th>
+                                    <th><?php _e( 'Status', 'ssm-inventory' ); ?></th>
+                                    <th><?php _e( 'Actions', 'ssm-inventory' ); ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td><?php _e( 'Studio', 'ssm-inventory' ); ?></td>
+                                    <td><?php _e( '(English)', 'ssm-inventory' ); ?></td>
+                                    <td><?php _e( '2 Guests', 'ssm-inventory' ); ?></td>
+                                    <td><button class="ssm-button-link"><?php _e( 'View Details', 'ssm-inventory' ); ?></button></td>
+                                    <td><span class="ssm-badge ssm-badge-success"><?php _e( 'Active', 'ssm-inventory' ); ?></span></td>
+                                    <td class="ssm-table-actions">
+                                        <button class="ssm-action-button ssm-action-edit"><?php _e( 'Edit', 'ssm-inventory' ); ?></button>
+                                        <button class="ssm-action-button ssm-action-delete"><?php _e( 'Delete', 'ssm-inventory' ); ?></button>
+                                        <input type="checkbox" class="ssm-checkbox-toggle" checked>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><?php _e( 'Shop', 'ssm-inventory' ); ?></td>
+                                    <td><?php _e( 'Residential', 'ssm-inventory' ); ?></td>
+                                    <td><?php _e( '50 Seats', 'ssm-inventory' ); ?></td>
+                                    <td><button class="ssm-button-link"><?php _e( 'JSON Details', 'ssm-inventory' ); ?></button></td>
+                                    <td><span class="ssm-badge ssm-badge-success"><?php _e( 'Active', 'ssm-inventory' ); ?></span></td>
+                                    <td class="ssm-table-actions">
+                                        <button class="ssm-action-button ssm-action-edit"><?php _e( 'Edit', 'ssm-inventory' ); ?></button>
+                                        <button class="ssm-action-button ssm-action-delete"><?php _e( 'Delete', 'ssm-inventory' ); ?></button>
+                                        <input type="checkbox" class="ssm-checkbox-toggle" checked>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><?php _e( 'Hall', 'ssm-inventory' ); ?></td>
+                                    <td><?php _e( 'Event', 'ssm-inventory' ); ?></td>
+                                    <td><?php _e( '50 Seats', 'ssm-inventory' ); ?></td>
+                                    <td><button class="ssm-button-link"><?php _e( 'View Details', 'ssm-inventory' ); ?></button></td>
+                                    <td><span class="ssm-badge ssm-badge-inactive"><?php _e( 'Inactive', 'ssm-inventory' ); ?></span></td>
+                                    <td class="ssm-table-actions">
+                                        <button class="ssm-action-button ssm-action-edit"><?php _e( 'Edit', 'ssm-inventory' ); ?></button>
+                                        <button class="ssm-action-button ssm-action-delete"><?php _e( 'Delete', 'ssm-inventory' ); ?></button>
+                                        <input type="checkbox" class="ssm-checkbox-toggle">
+                                    </td>
+                                </tr>
+                                </tbody>
+                        </table>
+                        </section>
+                </div> <div class="ssm-grid-sidebar">
+                    <section class="ssm-card ssm-form-sidebar">
+                        <div class="ssm-form-sidebar-header">
+                            <h3><?php _e( 'Edit Unit Type', 'ssm-inventory' ); ?></h3>
+                            </div>
+                        <div class="ssm-form-sidebar-content">
+                            <div class="ssm-form-field">
+                                <label for="ssm-type-name"><?php _e( 'Type Name (Urdu)', 'ssm-inventory' ); ?></label>
+                                <input type="text" id="ssm-type-name" value="Studio">
+                            </div>
+                            <div class="ssm-form-field">
+                                <label for="ssm-type-category"><?php _e( 'Category', 'ssm-inventory' ); ?></label>
+                                <select id="ssm-type-category">
+                                    <option><?php _e( 'Residential', 'ssm-inventory' ); ?></option>
+                                    <option><?php _e( 'Commercial', 'ssm-inventory' ); ?></option>
+                                    <option><?php _e( 'Event', 'ssm-inventory' ); ?></option>
+                                </select>
+                            </div>
+                            <div class="ssm-form-field">
+                                <label for="ssm-type-capacity"><?php _e( 'Capacity', 'ssm-inventory' ); ?></label>
+                                <input type="number" id="ssm-type-capacity" value="2" class="ssm-input-small">
+                            </div>
+                            <div class="ssm-form-field">
+                                <label for="ssm-default-rate-plan"><?php _e( 'Default Rate Plan', 'ssm-inventory' ); ?></label>
+                                <select id="ssm-default-rate-plan">
+                                    <option><?php _e( 'Select rate plan...', 'ssm-inventory' ); ?></option>
+                                </select>
+                            </div>
+                            <div class="ssm-form-field">
+                                <label for="ssm-features-json"><?php _e( 'Description / Features JSON', 'ssm-inventory' ); ?></label>
+                                <textarea id="ssm-features-json" rows="6"><?php echo esc_textarea( '{\n  "beds": 1,\n  "kitchenette": true,\n  "tv_size_inches": 42\n}' ); ?></textarea>
+                                <button class="ssm-button-tertiary ssm-button-small"><?php _e( 'Validate JSON', 'ssm-inventory' ); ?></button>
+                            </div>
+                            <div class="ssm-form-field">
+                                <input type="checkbox" id="ssm-mark-featured" class="ssm-checkbox">
+                                <label for="ssm-mark-featured"><?php _e( 'Mark as Featured', 'ssm-inventory' ); ?></label>
+                            </div>
+                        </div>
+                        <div class="ssm-form-sidebar-footer">
+                            <button class="ssm-button ssm-button-primary"><?php _e( 'Save', 'ssm-inventory' ); ?></button>
+                            <button class="ssm-button ssm-button-tertiary"><?php _e( 'Cancel', 'ssm-inventory' ); ?></button>
+                        </div>
+                    </section>
+                    </div>
+
+            </div> <footer class="ssm-page-footer">
+                <span><?php _e( 'Last updated just now', 'ssm-inventory' ); ?></span>
+                <div class="ssm-footer-actions">
+                    <button class="ssm-button ssm-button-primary"><?php _e( 'Save All Changes', 'ssm-inventory' ); ?></button>
+                    <button class="ssm-button ssm-button-tertiary"><?php _e( 'Discard', 'ssm-inventory' ); ?></button>
+                    <button class="ssm-button ssm-button-link"><?php _e( 'Reset to Defaults', 'ssm-inventory' ); ?></button>
+                </div>
+            </footer>
+            </div> <?php
         echo '</template>';
     }
 
