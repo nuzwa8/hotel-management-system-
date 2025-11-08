@@ -1049,3 +1049,74 @@ function ssm_run_inventory_plugin() {
     new SSM_Inventory_Plugin();
 }
 add_action( 'plugins_loaded', 'ssm_run_inventory_plugin' );
+// 🟢 یہاں سے [Database Activation Hook] شروع ہو رہا ہے
+
+/**
+ * Activation hook function.
+ * Creates database tables required for the plugin.
+ */
+function ssm_plugin_activate() {
+    global $wpdb;
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+    $charset_collate = $wpdb->get_charset_collate();
+
+    // 1. Unit Types Table (ssm_unit_types)
+    $table_unit_types = $wpdb->prefix . 'ssm_unit_types';
+    $sql_unit_types = "CREATE TABLE $table_unit_types (
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        type_name VARCHAR(255) NOT NULL,
+        category VARCHAR(100) NOT NULL COMMENT 'apartment|studio|shop|hall|roof',
+        capacity INT(10) UNSIGNED DEFAULT 0,
+        features_json TEXT DEFAULT NULL,
+        status VARCHAR(20) NOT NULL DEFAULT 'active',
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        KEY category (category),
+        KEY status (status)
+    ) $charset_collate;";
+    dbDelta( $sql_unit_types );
+
+    // 2. Units Table (ssm_units)
+    $table_units = $wpdb->prefix . 'ssm_units';
+    $sql_units = "CREATE TABLE $table_units (
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        unit_type_id BIGINT(20) UNSIGNED NOT NULL,
+        unit_code VARCHAR(100) NOT NULL COMMENT 'e.g., 101, Shop-A, Hall-1',
+        unit_name VARCHAR(255) DEFAULT NULL,
+        floor VARCHAR(100) DEFAULT NULL,
+        status VARCHAR(50) NOT NULL DEFAULT 'available' COMMENT 'available|occupied|maintenance|dirty',
+        attributes_json TEXT DEFAULT NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        UNIQUE KEY unit_code (unit_code),
+        KEY unit_type_id (unit_type_id),
+        KEY status (status)
+    ) $charset_collate;";
+    dbDelta( $sql_units );
+
+    // 3. Rate Plans Table (ssm_rate_plans)
+    $table_rate_plans = $wpdb->prefix . 'ssm_rate_plans';
+    $sql_rate_plans = "CREATE TABLE $table_rate_plans (
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        plan_name VARCHAR(255) NOT NULL,
+        unit_type_id BIGINT(20) UNSIGNED NOT NULL COMMENT 'Which unit type this plan applies to',
+        charge_basis VARCHAR(50) NOT NULL COMMENT 'nightly|monthly|hourly|slot',
+        price_rules_json TEXT NOT NULL,
+        status VARCHAR(20) NOT NULL DEFAULT 'active',
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        KEY unit_type_id (unit_type_id),
+        KEY charge_basis (charge_basis)
+    ) $charset_collate;";
+    dbDelta( $sql_rate_plans );
+
+    // Add default options
+    add_option( 'ssm_inventory_version', SSM_Inventory_Plugin::VERSION );
+}
+register_activation_hook( SSM_PLUGIN_FILE, 'ssm_plugin_activate' );
+
+// 🔴 یہاں پر [Database Activation Hook] ختم ہو رہا ہے
