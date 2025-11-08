@@ -35,14 +35,18 @@ final class SSM_Inventory_Plugin {
      * Plugin version.
      */
     const VERSION = SSM_PLUGIN_VERSION; // Use the global constant
-
-    /**
+/**
      * Constructor.
      */
     public function __construct() {
         // Constants are now global, no need to define them here.
         add_action( 'admin_menu', array( $this, 'register_admin_menus' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
+
+        // 🟢 یہاں سے [AJAX Hooks] شروع ہو رہا ہے
+        add_action( 'wp_ajax_ssm_get_unit_types', array( $this, 'ajax_get_unit_types' ) );
+        add_action( 'wp_ajax_ssm_save_unit_type', array( $this, 'ajax_save_unit_type' ) );
+        // 🔴 یہاں پر [AJAX Hooks] ختم ہو رہا ہے
     }
 
     /**
