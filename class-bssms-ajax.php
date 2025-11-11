@@ -234,3 +234,72 @@ public static function handle_save_admission() {
 // 🔴 یہاں پر مزید (AJAX) ہینڈلرز بعد میں شامل ہوں گے۔
 
 // ✅ Syntax verified block end
+	/** Part 5 — Students List: AJAX Handlers for Fetching and Deleting */
+
+// BSSMS_Ajax کلاس کے اندر، handle_fetch_students() اور نیا handle_delete_admission() فنکشن شامل کریں۔
+
+// handle_fetch_students() فنکشن کا نیا اور مکمل کوڈ (پُرانے کی جگہ پر):
+public static function handle_fetch_students() {
+    check_ajax_referer( 'bssms_fetch_students', 'nonce' );
+
+    // قاعدہ 4: current_user_can()
+    if ( ! current_user_can( 'bssms_manage_admissions' ) ) {
+        wp_send_json_error( array( 'message_ur' => 'آپ کے پاس طالب علموں کی فہرست دیکھنے کی اجازت نہیں ہے۔', 'message_en' => 'You do not have permission to view the students list.' ) );
+    }
+
+    // 1. فلٹر دلائل حاصل کریں اور سینیٹائز کریں
+    $args = array(
+        'per_page' => absint( $_POST['per_page'] ?? 10 ),
+        'page'     => absint( $_POST['page'] ?? 1 ),
+        'search'   => sanitize_text_field( wp_unslash( $_POST['search'] ?? '' ) ),
+        'course_id'=> absint( $_POST['course_id'] ?? 0 ),
+        'status'   => sanitize_text_field( wp_unslash( $_POST['status'] ?? '' ) ),
+        'date_from'=> sanitize_text_field( wp_unslash( $_POST['date_from'] ?? '' ) ),
+        'date_to'  => sanitize_text_field( wp_unslash( $_POST['date_to'] ?? '' ) ),
+    );
+
+    // 2. ڈیٹا بیس سے ڈیٹا لائیں
+    $data = BSSMS_DB::get_filtered_admissions( $args ); // قاعدہ 7: Optimized Loops + Pagination
+
+    $response = array(
+        'success' => true,
+        'message_ur' => 'طالب علم کی فہرست کامیابی سے لوڈ ہو گئی ہے۔',
+        'data' => $data,
+        'filters' => $args,
+    );
+
+    wp_send_json_success( $response );
+}
+
+/**
+ * ایک داخلہ ریکارڈ کو حذف کرنے کا AJAX ہینڈلر۔
+ */
+public static function handle_delete_admission() {
+    check_ajax_referer( 'bssms_delete_admission', 'nonce' ); // نیا Nonce: bssms_delete_admission
+
+    // صرف وہ یوزر حذف کر سکتے ہیں جن کے پاس 'manage_options' یا 'bssms_manage_admissions' کی قابلیت ہو۔
+    if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'bssms_manage_admissions' ) ) {
+        wp_send_json_error( array( 'message_ur' => 'آپ کے پاس اس ریکارڈ کو حذف کرنے کی اجازت نہیں ہے۔' ) );
+    }
+
+    $id = absint( $_POST['id'] ?? 0 );
+
+    if ( $id === 0 ) {
+        wp_send_json_error( array( 'message_ur' => 'ریکارڈ ID غائب ہے۔' ) );
+    }
+
+    $deleted = BSSMS_DB::delete_admission( $id );
+
+    if ( $deleted ) {
+        wp_send_json_success( array( 
+            'message_ur' => 'ریکارڈ #' . $id . ' کامیابی سے حذف کر دیا گیا ہے۔', 
+            'id' => $id 
+        ) );
+    } else {
+        wp_send_json_error( array( 'message_ur' => 'ریکارڈ حذف کرنے میں خرابی پیش آئی یا ریکارڈ موجود نہیں تھا۔' ) );
+    }
+}
+
+// 🔴 یہاں پر مزید (AJAX) ہینڈلرز بعد میں شامل ہوں گے۔
+
+// ✅ Syntax verified block end
