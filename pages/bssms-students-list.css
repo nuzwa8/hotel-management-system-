@@ -1,0 +1,200 @@
+/**
+ * bssms-students-list.css
+ * طالب علم کی فہرست (Students List) کے لیے سرشار اسٹائلز۔
+ * قاعدہ 6: Namespace (.bssms), Tokens, Responsive, RTL
+ */
+
+/* 🟢 یہاں سے Students List Styles شروع ہو رہے ہیں */
+
+.bssms-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bssms-spacing-md);
+}
+
+/* --- ٹول بار اور فلٹرز --- */
+.bssms-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--bssms-spacing-md);
+    background: var(--bssms-bg-card);
+    border: 1px solid var(--bssms-color-border);
+    border-radius: 6px;
+}
+
+.bssms-filter-area {
+    display: flex;
+    gap: var(--bssms-spacing-sm);
+    align-items: center;
+}
+
+.bssms-date-range {
+    display: flex;
+    align-items: center;
+    gap: var(--bssms-spacing-xs);
+}
+
+.bssms-date-range .bssms-label {
+    margin: 0;
+    font-weight: normal;
+}
+
+.bssms-date-range .bssms-input {
+    width: 130px;
+    padding: 6px;
+}
+
+/* --- مرکزی مواد (ٹیبل + سمری سائیڈ بار) --- */
+.bssms-main-content {
+    display: flex;
+    gap: var(--bssms-spacing-lg);
+}
+
+.bssms-list-table-container {
+    flex-grow: 1;
+    overflow-x: auto; /* ٹیبل کے لیے رسپانسیو */
+}
+
+/* --- ٹیبل اسٹائلنگ --- */
+.bssms-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bssms-bg-card);
+    border: 1px solid var(--bssms-color-border);
+    margin-bottom: var(--bssms-spacing-md);
+}
+
+.bssms-table th, .bssms-table td {
+    padding: var(--bssms-spacing-sm) var(--bssms-spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--bssms-color-border);
+    white-space: nowrap; /* لمبے مواد کو ایک لائن میں رکھیں */
+}
+
+.bssms-table th {
+    background-color: var(--bssms-bg-page);
+    color: var(--bssms-color-text);
+    font-weight: 600;
+}
+
+.bssms-table tr:hover {
+    background-color: #f9f9f9; /* لائٹ موڈ ہوور */
+}
+
+/* فیس کالمز کو دائیں طرف الائن کریں (رقم کے لیے) */
+.bssms-table .column-fee {
+    text-align: right;
+    font-weight: 500;
+}
+
+/* ادائیگی کی حیثیت کو نمایاں کریں */
+.bssms-table .status-due {
+    color: var(--bssms-color-error);
+    font-weight: 600;
+}
+
+.bssms-table .status-paid {
+    color: var(--bssms-color-secondary);
+}
+
+.bssms-table .bssms-urdu-text {
+    font-size: 0.8em;
+    color: #888;
+    direction: rtl;
+    display: block;
+}
+
+/* --- آئیکن بٹن (Actions) --- */
+.bssms-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    padding: 4px;
+    margin: 0 2px;
+}
+.bssms-icon-btn:hover {
+    opacity: 0.7;
+}
+
+/* --- سمری سائیڈ بار اور چارٹ --- */
+.bssms-summary-sidebar {
+    width: 300px; /* سائیڈ بار کی چوڑائی فکس کریں */
+    min-width: 250px;
+}
+
+.bssms-summary-card {
+    position: sticky;
+    top: 50px; /* سکرول کرتے وقت ساتھ رہے */
+}
+
+.bssms-summary-card .section-title {
+    color: var(--bssms-color-secondary);
+}
+
+.bssms-summary-card p {
+    font-size: 15px;
+    margin: 5px 0;
+}
+
+/* --- پیجینیشن --- */
+.bssms-footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--bssms-spacing-sm) 0;
+}
+
+.bssms-pagination .bssms-btn-pagination {
+    padding: 6px 12px;
+    margin: 0 2px;
+    border: 1px solid var(--bssms-color-border);
+    background: var(--bssms-bg-card);
+    color: var(--bssms-color-text);
+}
+
+.bssms-pagination .bssms-btn-pagination.active {
+    background-color: var(--bssms-color-primary);
+    color: white;
+}
+
+.bssms-pagination .bssms-btn-pagination:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* --- ڈارک موڈ ایڈجسٹمنٹس --- */
+body.bssms-dark-mode .bssms-table tr:hover {
+    background-color: #383838;
+}
+
+body.bssms-dark-mode .bssms-table th {
+    background-color: #2c2c2c;
+}
+
+/* --- رسپانسیو سپورٹ (چھوٹے سکرین کے لیے) --- */
+@media (max-width: 1024px) {
+    .bssms-main-content {
+        flex-direction: column; /* عمودی لے آؤٹ */
+    }
+
+    .bssms-summary-sidebar {
+        width: 100%;
+        order: -1; /* سمری کو اوپر لے جائیں */
+    }
+
+    .bssms-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .bssms-filter-area {
+        flex-wrap: wrap;
+        margin-bottom: var(--bssms-spacing-sm);
+    }
+}
+
+/* 🔴 یہاں پر Students List Styles ختم ہو رہے ہیں */
+
+/* ✅ Syntax verified block end */
